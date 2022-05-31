@@ -6,3 +6,9 @@ var data = {
   editing: null,
   nextEntryId: 1
 };
+
+var previousEntriesJSON = localStorage.getItem('javascript-local-storage');
+
+if (previousEntriesJSON !== null) {
+  data.entries = JSON.parse(previousEntriesJSON);
+}

@@ -16,14 +16,21 @@ formValues.addEventListener('submit', save);
 
 function save(event) {
   event.preventDefault();
-  /*  var entry = {
+  var entry = {
     title: document.querySelector('#title').value,
     notes: document.querySelector('#notes').value,
     photoUrl: document.querySelector('.photoUrl').value,
-    nextEntryId: 0
+    id: data.nextEntryId
   };
+  data.entries.push(entry);
   entry.nextEntryId++;
-  console.log(entry); */
   formValues.reset();
   picture.src = 'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640';
+}
+
+window.addEventListener('beforeunload', stringify);
+
+function stringify(event) {
+  var entriesJSON = JSON.stringify(data.entries);
+  localStorage.setItem('javascript-local-storage', entriesJSON);
 }
