@@ -17,8 +17,44 @@
 </head>
 <body>
   <header>
+    <h2>Code Journal</h2>
+    <h1>New Entry</h1>
   </header>
   <main>
+    <div data-view="entry-form">
+      <form>
+        <div class="container">
+          <div class="row">
+            <div class="column-half">
+              <img class="picture" src="https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640">
+            </div>
+            <div class="column-half">
+              <label for="title">
+                <span>Title</span>
+                <input type="text" id="title" required>
+              </label>
+              <label for="PhotoUrl">
+                <span>Photo URL</span>
+                <input type="text" class="photoUrl" required>
+              </label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="column-full">
+              <label for="notes">
+                <span>Notes</span>
+              </label>
+              <textarea id="notes" name="notes" required></textarea>
+            </div>
+            <div class="column-full">
+              <div class="justify-flex-end">
+                <button>SAVE</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
   </main>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>
