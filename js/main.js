@@ -22,15 +22,8 @@ function save(event) {
     photoUrl: document.querySelector('.photoUrl').value,
     id: data.nextEntryId
   };
-  data.entries.push(entry);
-  entry.nextEntryId++;
+  data.entries[entry.id] = entry;
   formValues.reset();
+  data.nextEntryId++;
   picture.src = 'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640';
-}
-
-window.addEventListener('beforeunload', stringify);
-
-function stringify(event) {
-  var entriesJSON = JSON.stringify(data.entries);
-  localStorage.setItem('javascript-local-storage', entriesJSON);
 }
