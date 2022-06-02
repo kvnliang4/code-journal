@@ -64,3 +64,47 @@ function appendDomContent(event) {
     }
   }
 }
+
+var noEntry = document.querySelector('.no-entry');
+
+if (data.entries.length === 0) {
+  noEntry.className = 'no-entry';
+}
+
+var display = document.querySelectorAll('.display');
+
+window.addEventListener('click', click);
+
+function click(event) {
+  var dataView = event.target.getAttribute('data-view');
+  if (event.target.matches('.view-entries')) {
+    for (var i = 0; i < display.length; i++) {
+      display[i].className = 'display hidden';
+      if (display[i].getAttribute('data-view') === dataView) {
+        display[i].className = 'display';
+      }
+    }
+  } else if (event.target.matches('.new-button')) {
+    for (i = 0; i < display.length; i++) {
+      display[i].className = 'display hidden';
+      if (display[i].getAttribute('data-view') === dataView) {
+        display[i].className = 'display';
+      }
+    }
+  }
+}
+
+/* window.addEventListener('submit', entriesView);
+
+function entriesView(event) {
+  var dataView = event.target.getAttribute('data-view');
+  if (event.target.matches('.submit')) {
+    for (var i = 0; i < display.length; i++) {
+      display[i].className = 'display hidden';
+      if (display[i].getAttribute('data-view') === dataView) {
+        display[i].className = 'display';
+      }
+    }
+  }
+}
+*/
