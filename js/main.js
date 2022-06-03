@@ -75,6 +75,9 @@ var display = document.querySelectorAll('.display');
 
 window.addEventListener('click', click);
 
+var inputCheck = document.querySelectorAll('input');
+var textarea = document.querySelector('textarea');
+
 function click(event) {
   var dataView = event.target.getAttribute('data-view');
   if (event.target.matches('.view-entries')) {
@@ -91,15 +94,15 @@ function click(event) {
         display[i].className = 'display';
       }
     }
-  }
-}
-
-/* window.addEventListener('submit', entriesView);
-
-function entriesView(event) {
-  var dataView = event.target.getAttribute('data-view');
-  if (event.target.matches('.submit')) {
-    for (var i = 0; i < display.length; i++) {
+  } else if (event.target.matches('.submit')) {
+    for (i = 0; i < 1; i++) {
+      for (var j = 0; j < inputCheck.length; j++) {
+        if (inputCheck[j].value.length === 0 || textarea.value.length === 0) {
+          return;
+        }
+      }
+    }
+    for (i = 0; i < display.length; i++) {
       display[i].className = 'display hidden';
       if (display[i].getAttribute('data-view') === dataView) {
         display[i].className = 'display';
@@ -107,4 +110,3 @@ function entriesView(event) {
     }
   }
 }
-*/
