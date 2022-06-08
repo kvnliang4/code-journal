@@ -26,6 +26,8 @@ function save(event) {
   formValues.reset();
   data.nextEntryId++;
   picture.src = 'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640';
+
+  location.reload();
 }
 
 function renderEntries(entry) { // Creates DOM tree
@@ -60,7 +62,7 @@ window.addEventListener('DOMContentLoaded', appendDomContent); // Appends DOM tr
 function appendDomContent(event) {
   for (var i = 0; i < data.entries.length; i++) {
     if (data.entries[i] !== null) {
-      ul.appendChild(renderEntries((data.entries[i])));
+      ul.insertBefore(renderEntries((data.entries[i])), ul.firstChild);
     }
   }
 }
@@ -72,13 +74,12 @@ if (data.entries.length === 0) {
 }
 
 var display = document.querySelectorAll('.display');
-
-window.addEventListener('click', click);
-
 var inputCheck = document.querySelectorAll('input');
 var textarea = document.querySelector('textarea');
 
-function click(event) { // switches view between pages
+window.addEventListener('click', clickEntries); // switches view when entries is clicked
+
+function clickEntries(event) {
   var dataView = event.target.getAttribute('data-view');
   if (event.target.matches('.view-entries')) {
     for (var i = 0; i < display.length; i++) {
@@ -88,16 +89,30 @@ function click(event) { // switches view between pages
         data.view = 'entries';
       }
     }
-  } else if (event.target.matches('.new-button')) {
-    for (i = 0; i < display.length; i++) {
+  }
+}
+
+window.addEventListener('click', clickNewButton); // switches view with new button is clicked
+
+function clickNewButton(event) {
+  var dataView = event.target.getAttribute('data-view');
+  if (event.target.matches('.new-button')) {
+    for (var i = 0; i < display.length; i++) {
       display[i].className = 'display hidden';
       if (display[i].getAttribute('data-view') === dataView) {
         display[i].className = 'display';
         data.view = 'entry-form';
       }
     }
-  } else if (event.target.matches('.submit')) { // checks if any inputs on the entry form are empty
-    for (i = 0; i < 1; i++) {
+  }
+}
+
+window.addEventListener('click', clickSaveButton); // switches view when entry is submitted
+
+function clickSaveButton(event) {
+  var dataView = event.target.getAttribute('data-view');
+  if (event.target.matches('.submit')) { // checks if any inputs on the entry form are empty
+    for (var i = 0; i < 1; i++) {
       for (var j = 0; j < inputCheck.length; j++) {
         if (inputCheck[j].value.length === 0 || textarea.value.length === 0) {
           return;
