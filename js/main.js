@@ -26,7 +26,6 @@ function save(event) {
   formValues.reset();
   data.nextEntryId++;
   picture.src = 'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640';
-
   location.reload();
 }
 
