@@ -33,6 +33,7 @@ var ul = document.querySelector('ul');
 
 function renderEntries(entry) { // Creates DOM tree
   var li = document.createElement('li');
+  li.setAttribute('data-entry-id', entry.id);
   var rowDiv = document.createElement('div');
   rowDiv.className = 'row';
   li.appendChild(rowDiv);
@@ -47,8 +48,12 @@ function renderEntries(entry) { // Creates DOM tree
   rowDiv.appendChild(textColumnDiv);
   var title = document.createElement('span');
   var text = document.createElement('p');
+  var editButton = document.createElement('i');
   textColumnDiv.appendChild(title);
+  textColumnDiv.appendChild(editButton);
   textColumnDiv.appendChild(text);
+  editButton.className = 'fa-solid fa-pen';
+  editButton.setAttribute('data-view', 'entry-form');
   var entryTitle = document.createTextNode(entry.title);
   title.appendChild(entryTitle);
   var entryNotes = document.createTextNode(entry.notes);
@@ -92,6 +97,8 @@ function clickEntries(event) {
   }
 }
 
+var formHeading = document.querySelector('.form-heading');
+
 window.addEventListener('click', clickNewButton); // switches view with new button is clicked
 
 function clickNewButton(event) {
@@ -102,6 +109,7 @@ function clickNewButton(event) {
       if (display[i].getAttribute('data-view') === dataView) {
         display[i].className = 'display';
         data.view = 'entry-form';
+        formHeading.textContent = 'New Entry';
       }
     }
   }
@@ -146,6 +154,23 @@ function keepPage(event) {
       if (display[i].getAttribute('data-view') === data.view) {
         display[i].className = 'display';
 
+      }
+    }
+  }
+}
+
+// creating edit button functions
+ul.addEventListener('click', editEntry);
+
+function editEntry(event) {
+  if (event.target.tagName === 'I') {
+    var dataView = event.target.getAttribute('data-view');
+    for (var i = 0; i < display.length; i++) {
+      display[i].className = 'display hidden';
+      if (display[i].getAttribute('data-view') === dataView) {
+        display[i].className = 'display';
+        data.view = 'entry-form';
+        formHeading.textContent = 'Edit Entry';
       }
     }
   }
