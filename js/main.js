@@ -22,12 +22,14 @@ function save(event) {
     photoUrl: document.querySelector('.photoUrl').value,
     id: data.nextEntryId
   };
-  data.entries[entry.id] = entry;
+  data.entries.unshift(entry);
   formValues.reset();
   data.nextEntryId++;
   picture.src = 'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640';
-  location.reload();
+  ul.prepend(renderEntries(entry));
 }
+
+var ul = document.querySelector('ul');
 
 function renderEntries(entry) { // Creates DOM tree
   var li = document.createElement('li');
@@ -51,17 +53,16 @@ function renderEntries(entry) { // Creates DOM tree
   title.appendChild(entryTitle);
   var entryNotes = document.createTextNode(entry.notes);
   text.appendChild(entryNotes);
+  noEntry.classList.add('hidden');
   return li;
 }
-
-var ul = document.querySelector('ul');
 
 window.addEventListener('DOMContentLoaded', appendDomContent); // Appends DOM trees for new entries
 
 function appendDomContent(event) {
   for (var i = 0; i < data.entries.length; i++) {
     if (data.entries[i] !== null) {
-      ul.insertBefore(renderEntries((data.entries[i])), ul.firstChild);
+      ul.appendChild(renderEntries(data.entries[i]));
     }
   }
 }
@@ -69,7 +70,7 @@ function appendDomContent(event) {
 var noEntry = document.querySelector('.no-entry'); // Displays no entry text when no entries have been entered
 
 if (data.entries.length === 0) {
-  noEntry.className = 'no-entry';
+  noEntry.classList.remove('hidden');
 }
 
 var display = document.querySelectorAll('.display');
