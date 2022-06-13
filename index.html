@@ -17,8 +17,70 @@
 </head>
 <body>
   <header>
+    <div class="purple-background">
+      <div class="container">
+        <div class="column-full">
+          <h2>Code Journal <a class="view-entries" data-view="entries" href="#">Entries</a></h2>
+        </div>
+      </div>
+    </div>
   </header>
   <main>
+    <div class="outter-box">
+      <div class="display" data-view="entry-form">
+        <form id="entry-form">
+          <div class="container">
+            <h1 class="column-full">New Entry</h1>
+          </div>
+          <div class="container">
+            <div class="row">
+              <div class="column-half">
+                <img class="picture" src="https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640">
+              </div>
+              <div class="column-half">
+                <label for="title">
+                  <span>Title</span>
+                  <input type="text" id="title" required>
+                </label>
+                <label for="PhotoUrl">
+                  <span>Photo URL</span>
+                  <input type="text" class="photoUrl" required>
+                </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="column-full">
+                <label for="notes">
+                  <span>Notes</span>
+                </label>
+                <textarea id="notes" name="notes" required></textarea>
+              </div>
+              <div class="column-full">
+                <div class="justify-flex-end">
+                  <button class="submit" data-view="entries">SAVE</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="outter-box">
+      <div class="display hidden" data-view="entries">
+        <div class="container">
+          <div class="row">
+            <h1 class="column-half">Entries</h1>
+            <div class="column-half button-column">
+              <div class="new-button" data-view="entry-form">NEW</div>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <span class="no-entry hidden">No entries have been recorded</span>
+          <ul></ul>
+        </div>
+      </div>
+    </div>
   </main>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>
