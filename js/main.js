@@ -16,17 +16,38 @@ formValues.addEventListener('submit', save);
 
 function save(event) {
   event.preventDefault();
-  var entry = {
-    title: document.querySelector('#title').value,
-    notes: document.querySelector('#notes').value,
-    photoUrl: document.querySelector('.photoUrl').value,
-    id: data.nextEntryId
-  };
-  data.entries.unshift(entry);
-  formValues.reset();
-  data.nextEntryId++;
-  picture.src = 'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640';
-  ul.prepend(renderEntries(entry));
+  if (data.editing === null) {
+    var entry = {
+      title: document.querySelector('#title').value,
+      notes: document.querySelector('#notes').value,
+      photoUrl: document.querySelector('.photoUrl').value,
+      id: data.nextEntryId
+    };
+    data.entries.unshift(entry);
+    formValues.reset();
+    data.nextEntryId++;
+    picture.src = 'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640';
+    ul.prepend(renderEntries(entry));
+  } else {
+    var updatedTitle = document.querySelector('#title').value;
+    var updatedNotes = document.querySelector('#notes').value;
+    var updatedPhotoUrl = document.querySelector('.photoUrl').value;
+    data.entries[data.entries.length - data.editing.id].title = updatedTitle;
+    data.entries[data.entries.length - data.editing.id].notes = updatedNotes;
+    data.entries[data.entries.length - data.editing.id].photoUrl = updatedPhotoUrl;
+    //    console.log(updatedNotes, updatedTitle);
+    /*    var updatedEntryId = data.editing.id;
+    var updatedEntry = {
+      title: updatedTitle,
+      notes: updatedNotes,
+      photoUrl: updatedPhotoUrl,
+      id: updatedEntryId
+    };
+    // data.entries[data.entries.length - updatedEntry.id] = updatedEntry;
+/*    var renderedUpdatedEntry = renderEntries(updatedEntry);
+    console.log(renderedUpdatedEntry); */
+    data.editing = null;
+  }
 }
 
 var ul = document.querySelector('ul');
@@ -110,6 +131,8 @@ function clickNewButton(event) {
         display[i].className = 'display';
         data.view = 'entry-form';
         formHeading.textContent = 'New Entry';
+        formValues.reset();
+        picture.src = 'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640';
       }
     }
   }
