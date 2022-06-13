@@ -173,5 +173,20 @@ function editEntry(event) {
         formHeading.textContent = 'Edit Entry';
       }
     }
+    var entryToEdit = event.target.closest('li');
+    var entryId = entryToEdit.getAttribute('data-entry-id');
+    for (i = 0; i < data.entries.length; i++) {
+      if (data.entries[i] === data.entries[data.entries.length - entryId]) {
+        data.editing = data.entries[i];
+        var title = document.querySelector('#title');
+        var notes = document.querySelector('#notes');
+        var photoUrl = document.querySelector('.photoUrl');
+        title.value = data.editing.title;
+        notes.value = data.editing.notes;
+        photoUrl.value = data.editing.photoUrl;
+        picture.src = photoUrl.value;
+        // var currentId = data.editing.id; <<<<wont let me commit because of eslint
+      }
+    }
   }
 }
