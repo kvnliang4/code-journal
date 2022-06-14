@@ -40,13 +40,8 @@ function save(event) {
     };
     data.entries[data.entries.length - updatedEntry.id] = updatedEntry;
     var savedEntries = document.querySelectorAll('[data-entry-id]');
-    // console.log(data.editing.id);
-    // console.log(savedEntries[1].getAttribute('data-entry-id'));
-    // console.log(renderEntries(updatedEntry));
     for (var i = 0; i < savedEntries.length; i++) {
-      // console.log(savedEntries[i].getAttribute('data-entry-id') === data.editing.id);
       if (Number(savedEntries[i].getAttribute('data-entry-id')) === data.editing.id) {
-        // console.log('working');
         var renderedUpdatedEntry = renderEntries(updatedEntry);
         savedEntries[i].replaceWith(renderedUpdatedEntry);
       }
@@ -124,7 +119,30 @@ function clickEntries(event) {
   }
 }
 
+// delete entry button functionality
+var deleteEntry = document.querySelector('h4');
+var modal = document.querySelector('.modal');
+var cancelButton = document.querySelector('.cancel-button');
+
+deleteEntry.addEventListener('click', clickDeleteEntry);
+
+function clickDeleteEntry(event) {
+  modal.className = 'modal';
+}
+
+cancelButton.addEventListener('click', clickCancelButton);
+
+function clickCancelButton(event) {
+  modal.className = 'modal hidden';
+}
+
 var formHeading = document.querySelector('.form-heading');
+
+if (formHeading.textContent !== 'Edit Entry') {
+  deleteEntry.className = 'hidden';
+} else {
+  deleteEntry.className = 'display';
+}
 
 window.addEventListener('click', clickNewButton); // switches view with new button is clicked
 
@@ -141,6 +159,11 @@ function clickNewButton(event) {
         picture.src = 'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640';
       }
     }
+  }
+  if (formHeading.textContent !== 'Edit Entry') {
+    deleteEntry.className = 'hidden';
+  } else {
+    deleteEntry.className = 'display';
   }
 }
 
@@ -214,7 +237,6 @@ function editEntry(event) {
         notes.value = data.editing.notes;
         photoUrl.value = data.editing.photoUrl;
         picture.src = photoUrl.value;
-        // var currentId = data.editing.id; <<<<wont let me commit because of eslint
       }
     }
   }

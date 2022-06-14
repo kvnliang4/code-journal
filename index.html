@@ -56,9 +56,8 @@
                 <textarea id="notes" name="notes" required></textarea>
               </div>
               <div class="column-full">
-                <div class="justify-flex-end">
-                  <button class="submit" data-view="entries">SAVE</button>
-                </div>
+                <h4 class="">Delete Entry</h4>
+                <button class="submit" data-view="entries">SAVE</button>
               </div>
             </div>
           </div>
@@ -79,6 +78,13 @@
           <span class="no-entry hidden">No entries have been recorded</span>
           <ul></ul>
         </div>
+      </div>
+    </div>
+    <div class="modal hidden">
+      <div class="modal-content">
+        <h3>Are you sure you want to delete this entry?</h3>
+        <span class="cancel-button">CANCEL</span>
+        <span class="confirm-button">CONFIRM</span>
       </div>
     </div>
   </main>
