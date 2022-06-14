@@ -97,7 +97,9 @@ function appendDomContent(event) {
 var noEntry = document.querySelector('.no-entry'); // Displays no entry text when no entries have been entered
 
 if (data.entries.length === 0) {
-  noEntry.classList.remove('hidden');
+  noEntry.className = 'no-entry';
+} else {
+  noEntry.className = 'no-entry hidden';
 }
 
 var display = document.querySelectorAll('.display');
@@ -157,6 +159,11 @@ function clickConfirm(event) {
   }
   modal.className = 'modal hidden';
   data.editing = null;
+  if (data.entries.length === 0) {
+    noEntry.className = 'no-entry';
+  } else {
+    noEntry.className = 'no-entry hidden';
+  }
 }
 
 var formHeading = document.querySelector('.form-heading');
