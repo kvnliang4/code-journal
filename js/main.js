@@ -123,6 +123,7 @@ function clickEntries(event) {
 var deleteEntry = document.querySelector('h4');
 var modal = document.querySelector('.modal');
 var cancelButton = document.querySelector('.cancel-button');
+var confirmDelete = document.querySelector('.confirm-button');
 
 deleteEntry.addEventListener('click', clickDeleteEntry);
 
@@ -134,6 +135,29 @@ cancelButton.addEventListener('click', clickCancelButton);
 
 function clickCancelButton(event) {
   modal.className = 'modal hidden';
+}
+
+confirmDelete.addEventListener('click', clickConfirm);
+
+function clickConfirm(event) {
+  var savedEntries = document.querySelectorAll('[data-entry-id]');
+  for (var i = 0; i < savedEntries.length; i++) {
+    if (Number(savedEntries[i].getAttribute('data-entry-id')) === data.editing.id) {
+      data.entries.splice(data.entries.length - data.editing.id, 1);
+      ul.removeChild(savedEntries[i]);
+    }
+  }
+  var dataView = event.target.getAttribute('data-view');
+  for (i = 0; i < display.length; i++) {
+    display[i].className = 'display hidden';
+    if (display[i].getAttribute('data-view') === dataView) {
+      display[i].className = 'display';
+      data.view = 'entries';
+    }
+  }
+  modal.className = 'modal hidden';
+  data.editing = null;
+  formValues.reset();
 }
 
 var formHeading = document.querySelector('.form-heading');
