@@ -38,10 +38,10 @@ function save(event) {
       photoUrl: updatedPhotoUrl,
       id: updatedEntryId
     };
-    data.entries[data.entries.length - updatedEntry.id] = updatedEntry;
     var savedEntries = document.querySelectorAll('[data-entry-id]');
     for (var i = 0; i < savedEntries.length; i++) {
       if (Number(savedEntries[i].getAttribute('data-entry-id')) === data.editing.id) {
+        data.entries[i] = updatedEntry;
         var renderedUpdatedEntry = renderEntries(updatedEntry);
         savedEntries[i].replaceWith(renderedUpdatedEntry);
       }
@@ -143,7 +143,7 @@ function clickConfirm(event) {
   var savedEntries = document.querySelectorAll('[data-entry-id]');
   for (var i = 0; i < savedEntries.length; i++) {
     if (Number(savedEntries[i].getAttribute('data-entry-id')) === data.editing.id) {
-      data.entries.splice(data.entries.length - data.editing.id, 1);
+      data.entries.splice(i, 1);
       ul.removeChild(savedEntries[i]);
     }
   }
@@ -157,7 +157,6 @@ function clickConfirm(event) {
   }
   modal.className = 'modal hidden';
   data.editing = null;
-  formValues.reset();
 }
 
 var formHeading = document.querySelector('.form-heading');
@@ -251,8 +250,9 @@ function editEntry(event) {
     }
     var entryToEdit = event.target.closest('li');
     var entryId = entryToEdit.getAttribute('data-entry-id');
+    // console.log(data.entries[0].id, Number(entryId));
     for (i = 0; i < data.entries.length; i++) {
-      if (data.entries[i] === data.entries[data.entries.length - entryId]) {
+      if (Number(data.entries[i].id) === Number(entryId)) {
         data.editing = data.entries[i];
         var title = document.querySelector('#title');
         var notes = document.querySelector('#notes');
