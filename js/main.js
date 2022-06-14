@@ -24,7 +24,6 @@ function save(event) {
       id: data.nextEntryId
     };
     data.entries.unshift(entry);
-    formValues.reset();
     data.nextEntryId++;
     picture.src = 'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640';
     ul.prepend(renderEntries(entry));
@@ -32,22 +31,29 @@ function save(event) {
     var updatedTitle = document.querySelector('#title').value;
     var updatedNotes = document.querySelector('#notes').value;
     var updatedPhotoUrl = document.querySelector('.photoUrl').value;
-    data.entries[data.entries.length - data.editing.id].title = updatedTitle;
-    data.entries[data.entries.length - data.editing.id].notes = updatedNotes;
-    data.entries[data.entries.length - data.editing.id].photoUrl = updatedPhotoUrl;
-    //    console.log(updatedNotes, updatedTitle);
-    /*    var updatedEntryId = data.editing.id;
+    var updatedEntryId = data.editing.id;
     var updatedEntry = {
       title: updatedTitle,
       notes: updatedNotes,
       photoUrl: updatedPhotoUrl,
       id: updatedEntryId
     };
-    // data.entries[data.entries.length - updatedEntry.id] = updatedEntry;
-/*    var renderedUpdatedEntry = renderEntries(updatedEntry);
-    console.log(renderedUpdatedEntry); */
+    data.entries[data.entries.length - updatedEntry.id] = updatedEntry;
+    var savedEntries = document.querySelectorAll('[data-entry-id]');
+    // console.log(data.editing.id);
+    // console.log(savedEntries[1].getAttribute('data-entry-id'));
+    // console.log(renderEntries(updatedEntry));
+    for (var i = 0; i < savedEntries.length; i++) {
+      // console.log(savedEntries[i].getAttribute('data-entry-id') === data.editing.id);
+      if (Number(savedEntries[i].getAttribute('data-entry-id')) === data.editing.id) {
+        // console.log('working');
+        var renderedUpdatedEntry = renderEntries(updatedEntry);
+        savedEntries[i].replaceWith(renderedUpdatedEntry);
+      }
+    }
     data.editing = null;
   }
+  formValues.reset();
 }
 
 var ul = document.querySelector('ul');
