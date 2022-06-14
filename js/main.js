@@ -16,20 +16,46 @@ formValues.addEventListener('submit', save);
 
 function save(event) {
   event.preventDefault();
-  var entry = {
-    title: document.querySelector('#title').value,
-    notes: document.querySelector('#notes').value,
-    photoUrl: document.querySelector('.photoUrl').value,
-    id: data.nextEntryId
-  };
-  data.entries[entry.id] = entry;
+  if (data.editing === null) {
+    var entry = {
+      title: document.querySelector('#title').value,
+      notes: document.querySelector('#notes').value,
+      photoUrl: document.querySelector('.photoUrl').value,
+      id: data.nextEntryId
+    };
+    data.entries.unshift(entry);
+    data.nextEntryId++;
+    picture.src = 'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640';
+    ul.prepend(renderEntries(entry));
+  } else {
+    var updatedTitle = document.querySelector('#title').value;
+    var updatedNotes = document.querySelector('#notes').value;
+    var updatedPhotoUrl = document.querySelector('.photoUrl').value;
+    var updatedEntryId = data.editing.id;
+    var updatedEntry = {
+      title: updatedTitle,
+      notes: updatedNotes,
+      photoUrl: updatedPhotoUrl,
+      id: updatedEntryId
+    };
+    var savedEntries = document.querySelectorAll('[data-entry-id]');
+    for (var i = 0; i < savedEntries.length; i++) {
+      if (Number(savedEntries[i].getAttribute('data-entry-id')) === data.editing.id) {
+        data.entries[i] = updatedEntry;
+        var renderedUpdatedEntry = renderEntries(updatedEntry);
+        savedEntries[i].replaceWith(renderedUpdatedEntry);
+      }
+    }
+    data.editing = null;
+  }
   formValues.reset();
-  data.nextEntryId++;
-  picture.src = 'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640';
 }
+
+var ul = document.querySelector('ul');
 
 function renderEntries(entry) { // Creates DOM tree
   var li = document.createElement('li');
+  li.setAttribute('data-entry-id', entry.id);
   var rowDiv = document.createElement('div');
   rowDiv.className = 'row';
   li.appendChild(rowDiv);
@@ -44,23 +70,26 @@ function renderEntries(entry) { // Creates DOM tree
   rowDiv.appendChild(textColumnDiv);
   var title = document.createElement('span');
   var text = document.createElement('p');
+  var editButton = document.createElement('i');
   textColumnDiv.appendChild(title);
+  textColumnDiv.appendChild(editButton);
   textColumnDiv.appendChild(text);
+  editButton.className = 'fa-solid fa-pen';
+  editButton.setAttribute('data-view', 'entry-form');
   var entryTitle = document.createTextNode(entry.title);
   title.appendChild(entryTitle);
   var entryNotes = document.createTextNode(entry.notes);
   text.appendChild(entryNotes);
+  noEntry.classList.add('hidden');
   return li;
 }
-
-var ul = document.querySelector('ul');
 
 window.addEventListener('DOMContentLoaded', appendDomContent); // Appends DOM trees for new entries
 
 function appendDomContent(event) {
   for (var i = 0; i < data.entries.length; i++) {
     if (data.entries[i] !== null) {
-      ul.appendChild(renderEntries((data.entries[i])));
+      ul.appendChild(renderEntries(data.entries[i]));
     }
   }
 }
@@ -69,16 +98,17 @@ var noEntry = document.querySelector('.no-entry'); // Displays no entry text whe
 
 if (data.entries.length === 0) {
   noEntry.className = 'no-entry';
+} else {
+  noEntry.className = 'no-entry hidden';
 }
 
 var display = document.querySelectorAll('.display');
-
-window.addEventListener('click', click);
-
 var inputCheck = document.querySelectorAll('input');
 var textarea = document.querySelector('textarea');
 
-function click(event) { // switches view between pages
+window.addEventListener('click', clickEntries); // switches view when entries is clicked
+
+function clickEntries(event) {
   var dataView = event.target.getAttribute('data-view');
   if (event.target.matches('.view-entries')) {
     for (var i = 0; i < display.length; i++) {
@@ -88,16 +118,91 @@ function click(event) { // switches view between pages
         data.view = 'entries';
       }
     }
-  } else if (event.target.matches('.new-button')) {
-    for (i = 0; i < display.length; i++) {
+  }
+}
+
+// delete entry button functionality
+var deleteEntry = document.querySelector('h4');
+var modal = document.querySelector('.modal');
+var cancelButton = document.querySelector('.cancel-button');
+var confirmDelete = document.querySelector('.confirm-button');
+
+deleteEntry.addEventListener('click', clickDeleteEntry);
+
+function clickDeleteEntry(event) {
+  modal.className = 'modal';
+}
+
+cancelButton.addEventListener('click', clickCancelButton);
+
+function clickCancelButton(event) {
+  modal.className = 'modal hidden';
+}
+
+confirmDelete.addEventListener('click', clickConfirm);
+
+function clickConfirm(event) {
+  var savedEntries = document.querySelectorAll('[data-entry-id]');
+  for (var i = 0; i < savedEntries.length; i++) {
+    if (Number(savedEntries[i].getAttribute('data-entry-id')) === data.editing.id) {
+      data.entries.splice(i, 1);
+      ul.removeChild(savedEntries[i]);
+    }
+  }
+  var dataView = event.target.getAttribute('data-view');
+  for (i = 0; i < display.length; i++) {
+    display[i].className = 'display hidden';
+    if (display[i].getAttribute('data-view') === dataView) {
+      display[i].className = 'display';
+      data.view = 'entries';
+    }
+  }
+  modal.className = 'modal hidden';
+  data.editing = null;
+  if (data.entries.length === 0) {
+    noEntry.className = 'no-entry';
+  } else {
+    noEntry.className = 'no-entry hidden';
+  }
+}
+
+var formHeading = document.querySelector('.form-heading');
+
+if (formHeading.textContent !== 'Edit Entry') {
+  deleteEntry.className = 'hidden';
+} else {
+  deleteEntry.className = 'display';
+}
+
+window.addEventListener('click', clickNewButton); // switches view with new button is clicked
+
+function clickNewButton(event) {
+  var dataView = event.target.getAttribute('data-view');
+  if (event.target.matches('.new-button')) {
+    for (var i = 0; i < display.length; i++) {
       display[i].className = 'display hidden';
       if (display[i].getAttribute('data-view') === dataView) {
         display[i].className = 'display';
         data.view = 'entry-form';
+        formHeading.textContent = 'New Entry';
+        formValues.reset();
+        picture.src = 'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640';
       }
     }
-  } else if (event.target.matches('.submit')) { // checks if any inputs on the entry form are empty
-    for (i = 0; i < 1; i++) {
+  }
+  if (formHeading.textContent !== 'Edit Entry') {
+    deleteEntry.className = 'hidden';
+  } else {
+    deleteEntry.className = 'display';
+  }
+}
+
+window.addEventListener('click', clickSaveButton); // switches view when entry is submitted
+
+function clickSaveButton(event) {
+  var dataView = event.target.getAttribute('data-view');
+  if (event.target.matches('.submit')) { // checks if any inputs on the entry form are empty
+    for (var i = 0; i < 1; i++) {
       for (var j = 0; j < inputCheck.length; j++) {
         if (inputCheck[j].value.length === 0 || textarea.value.length === 0) {
           return;
@@ -131,6 +236,38 @@ function keepPage(event) {
       if (display[i].getAttribute('data-view') === data.view) {
         display[i].className = 'display';
 
+      }
+    }
+  }
+}
+
+// creating edit button functions
+ul.addEventListener('click', editEntry);
+
+function editEntry(event) {
+  if (event.target.tagName === 'I') {
+    var dataView = event.target.getAttribute('data-view');
+    for (var i = 0; i < display.length; i++) {
+      display[i].className = 'display hidden';
+      if (display[i].getAttribute('data-view') === dataView) {
+        display[i].className = 'display';
+        data.view = 'entry-form';
+        formHeading.textContent = 'Edit Entry';
+      }
+    }
+    var entryToEdit = event.target.closest('li');
+    var entryId = entryToEdit.getAttribute('data-entry-id');
+    // console.log(data.entries[0].id, Number(entryId));
+    for (i = 0; i < data.entries.length; i++) {
+      if (Number(data.entries[i].id) === Number(entryId)) {
+        data.editing = data.entries[i];
+        var title = document.querySelector('#title');
+        var notes = document.querySelector('#notes');
+        var photoUrl = document.querySelector('.photoUrl');
+        title.value = data.editing.title;
+        notes.value = data.editing.notes;
+        photoUrl.value = data.editing.photoUrl;
+        picture.src = photoUrl.value;
       }
     }
   }
